@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <title>My Evo Calendar</title>
+        
+        <!-- Add the evo-calendar.css for styling -->
+<!-- <link rel="stylesheet" type="text/css" href="/Users/jaimespacco/Documents/Knox/141-redesign/evo-calendar/evo-calendar/css/evo-calendar.css"></script>  -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.statically.io/gh/jspacco/evo-calendar/main/evo-calendar/css/evo-calendar.css"></link>
+    </head>
+    <body>
+
+        <div id="calendar"></div>
+
+        <!-- Add jQuery library (required) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+
+
+<!-- Add the evo-calendar.js for.. obviously, functionality! -->
+  <!-- <script src="/Users/jaimespacco/Documents/Knox/141-redesign/evo-calendar/evo-calendar/js/evo-calendar.js"></script>  -->
+   <script src="https://cdn.statically.io/gh/jspacco/evo-calendar/main/evo-calendar/js/evo-calendar.js"></script>
+
+        <script>
+        // initialize your calendar, once the page's DOM is ready
+        //$(document).ready(function() {
+            $('#calendar').evoCalendar({
+                // 'format': 'yyyy-MM-dd',
+                'calendarEvents': [
+                {
+                    id: '1',
+                    name: "Battle of Hastings",
+                    description: 'It actually took place in 1066. The native English guy, like, got shot through the eye, and then the English lines broke. I guess maybe they were actually Ango Saxons or something?',
+                    type: 'holiday',
+                    badge: 'Battle',
+                    location: "Hastings, England",
+                    date: new Date(),
+                    username: 'admin',
+                    tags: ['England', 'Normans', 'Saxonophonicly', 'Battle'],
+                    everyYear: true
+              },
+    {
+                    id: '2',
+                    name: "today is the greatest",
+                    description: 'Lorem ipsum dolor sit amet..',
+                    type: 'birthday',
+                    badge: 'Today',
+                    date: '2024-07-15',
+                    everyYear: true
+              },
+    {
+                    id: '3',
+                    name: "today3",
+                    description: 'Lorem ipsum dolor sit amet..',
+                    type: 'event',
+                    badge: 'day off',
+                    date: "2023-7-15",
+                    everyYear: true
+              },
+    {
+                    id: '3',
+                    name: "today3",
+                    description: 'Lorem ipsum dolor sit amet..',
+                    type: 'event',
+                    badge: 'day off',
+                    date: "2023-07-15",
+                    everyYear: true
+              },
+    {
+                    id: '3',
+                    name: "today3",
+                    description: 'Lorem ipsum dolor sit amet..',
+                    type: 'event',
+                    badge: 'day off',
+                    date: "2023-7-15",
+                    everyYear: true
+              },
+    {
+                    id: '3',
+                    name: "today3",
+                    description: 'Lorem ipsum dolor sit amet..',
+                    type: 'holiday',
+                    badge: 'day off',
+                    date: "2023-7-15",
+                    everyYear: true
+              }
+            ]
+            });
+        //});
+
+
+
+        </script>
+
+    <footer>
+        
+    </footer>
+    </body>
+    
+</html>
