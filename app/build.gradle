@@ -1,0 +1,70 @@
+plugins {
+    id 'org.springframework.boot' version '3.2.0'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'java'
+}
+
+sourceCompatibility = '21'
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+    // Use JUnit Jupiter for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+
+    // This dependency is used by the application.
+    //implementation 'com.google.guava:guava:31.1-jre'
+
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+
+    //developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+}
+
+// application {
+//     // Define the main class for the application.
+//     mainClass = 'caldera.Server'
+// }
+
+// task server(type: JavaExec) {
+//     doFirst {
+//         standardInput = System.in
+//     }
+//     group = 'application'
+//     description = 'Run the Server class'
+//     classpath = sourceSets.main.runtimeClasspath
+//     main = 'caldera.Server'
+// }
+
+task client(type: JavaExec) {
+    group = 'application'
+    description = 'Run the Client class'
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'caldera.client.EventClient'
+}
+
+// run {
+//     dependsOn 'server'
+// }
+
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
+
+springBoot {
+    mainClass = 'caldera.server.SpringServer'
+}
+
+bootJar {
+    archiveFileName = 'spring.jar'
+}
+
