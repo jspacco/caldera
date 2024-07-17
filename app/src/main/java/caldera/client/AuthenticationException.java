@@ -1,4 +1,4 @@
-package caldera;
+package caldera.client;
 
 public class AuthenticationException extends RuntimeException
 {
