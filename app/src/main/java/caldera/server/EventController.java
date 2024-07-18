@@ -1,47 +1,52 @@
 package caldera.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import caldera.Event;
-
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequestMapping("/events")
 public class EventController
 {
-    private List<Event> events;
-    private final DataService dataService;
     private final AuthenticationService authenticationService;
+    private final EventRepository eventRepository;
     private final ObjectMapper objectMapper;
-
+    
     @Autowired
-    public EventController(DataService dataService, AuthenticationService authenticationService, ObjectMapper objectMapper)
+    public EventController(AuthenticationService authenticationService, EventRepository eventRepository, ObjectMapper objectMapper, ResourceLoader resourceLoader)
     {
-        this.dataService = dataService;
         this.authenticationService = authenticationService;
+        this.eventRepository = eventRepository;
         this.objectMapper = objectMapper;
-        // load base events
-        try {
-            this.events = dataService.loadEvents();
+        
+        Resource baseEventsPath = resourceLoader.getResource("classpath:static/base-events.json");
+        
+        try (InputStream inputStream = baseEventsPath.getInputStream()) {
+            List<Event> events = this.objectMapper.readValue(inputStream, new TypeReference<List<Event>>() {});
+            events.add(new Event("TODAY", "Today is the day", "todayness", LocalDate.now(), "Galesburg, IL", "admin", "today"));
+            eventRepository.saveAll(events);
         } catch (IOException e) {
-            //TODO: handle exception
-            e.printStackTrace();
+            //TODO: how to handle this exception?
+            throw new RuntimeException(e);
         }
     }
 
     @GetMapping
     public List<Event> getEvents()
     {
-        //TODO: read events from sqlite
-        return events;
+        return eventRepository.findAll();
     }
 
     @PostMapping
@@ -54,7 +59,8 @@ public class EventController
             // return unauthorized to client
             return new ResponseEntity<>("username or password incorrect", HttpStatus.UNAUTHORIZED);
         }
-        events.add(event);
+        eventRepository.save(event);
+        //events.add(event);
         return new ResponseEntity<>("event added", HttpStatus.CREATED);
     }
 }

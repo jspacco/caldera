@@ -1,25 +1,27 @@
-package caldera;
+package caldera.server;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.google.gson.Gson;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+
+@Entity
 public class Event
 {
-    private String id = UUID.randomUUID().toString();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String description;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate date;
@@ -27,6 +29,8 @@ public class Event
     private String location;
     private String username;
     private boolean everyYear = true;
+    @Column(columnDefinition = "TEXT")
+    @Convert(converter = StringListConverter.class)
     private List<String> tags = new LinkedList<>();
 
     public Event() {}
@@ -64,66 +68,6 @@ public class Event
     }
 
     
-    public Map<String, Object> toMap()
-	{
-		Map<String, Object> map = new HashMap<>();
-		map.put("name", getName());
-        map.put("description", getDescription());
-        map.put("date", getDate().toString());
-        map.put("location", getLocation());
-        map.put("username", getUsername());
-        map.put("tags", getTags());
-		return map;
-	}
-
-    public String toJson()
-    {
-        return new Gson().toJson(toMap());
-    }
-
-    public static Event fromMap(Map<String, Object> map)
-    {
-        return new Event((String) map.get("name"), 
-            (String) map.get("description"), 
-            (String) map.get("type"),
-            LocalDate.parse((String) map.get("date")),
-            (String) map.get("location"),
-            (String) map.get("username"),
-            (List<String>) map.get("tags"));
-    }
-
-    public static Event fromJson(String json)
-    {
-        Map<String, Object> map = new Gson().fromJson(json, Map.class);
-        return fromMap(map);
-    }
-
-    public static List<Event> fromJsonArray(String json)
-    {
-        List<Map<String, Object>> list = new Gson().fromJson(json, List.class);
-        List<Event> events = new LinkedList<>();
-        for (Map<String, Object> map : list)
-        {
-            events.add(fromMap(map));
-        }
-        return events;
-    }
-	
-	public void writeJsonToFile(String filePath) throws IOException
-	{
-		writeJsonToFile(new File(filePath));
-	}
-	
-	public void writeJsonToFile(File file) throws IOException
-	{
-        try (FileWriter writer = new FileWriter(file)) {
-            writer.write(toJson());
-            writer.flush();
-            writer.close();
-        }
-	}
-
-    // generate get/set methods for all instance variables
     public String getName()
     {
         return name;
@@ -199,12 +143,12 @@ public class Event
         tags.add(tag);
     }
 
-    public String getId()
+    public Long getId()
     {
         return id;
     }
 
-    public void setId(String id)
+    public void setId(Long id)
     {
         this.id = id;
     }

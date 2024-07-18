@@ -14,18 +14,10 @@ import java.util.Properties;
 public class AuthenticationService
 {
 
-    @Value("${users.properties}")
-    private String configFile;
-
-    @Value("${dog.cat}")
-    private String dogCat;
-
     private Properties properties;
 
     public AuthenticationService() throws IOException
     {
-        System.out.println("\n\n\ndogcat:\n" + dogCat);
-        System.out.println("\n\n\nHELLO:\n\n" + configFile);
         //Resource resource = new FileSystemResource(configFile);
         //this.properties = PropertiesLoaderUtils.loadProperties(resource);
         this.properties = new Properties();
