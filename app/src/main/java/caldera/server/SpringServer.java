@@ -11,6 +11,5 @@ public class SpringServer
         SpringApplication app = new SpringApplication(SpringServer.class);
         app.setAddCommandLineProperties(true);
         app.run(args);
-        //SpringApplication.run(SpringServer.class, args);
     }
 }   

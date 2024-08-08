@@ -38,21 +38,28 @@ dependencies {
 //     mainClass = 'caldera.Server'
 // }
 
-// task server(type: JavaExec) {
-//     doFirst {
-//         standardInput = System.in
-//     }
-//     group = 'application'
-//     description = 'Run the Server class'
-//     classpath = sourceSets.main.runtimeClasspath
-//     main = 'caldera.Server'
-// }
+task server(type: JavaExec) {
+    doFirst {
+        standardInput = System.in
+    }
+    group = 'application'
+    description = 'Run the Server class'
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'caldera.Server'
+}
 
 task client(type: JavaExec) {
     group = 'application'
     description = 'Run the Client class'
     classpath = sourceSets.main.runtimeClasspath
     main = 'caldera.client.EventClient'
+}
+
+task student(type: JavaExec) {
+    group = 'application'
+    description = 'Run the Client class'
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'caldera.client.ProcessEvents'
 }
 
 // run {

@@ -59,6 +59,7 @@ public class EventController
             // return unauthorized to client
             return new ResponseEntity<>("username or password incorrect", HttpStatus.UNAUTHORIZED);
         }
+        //TODO: handle exceptions
         eventRepository.save(event);
         //events.add(event);
         return new ResponseEntity<>("event added", HttpStatus.CREATED);

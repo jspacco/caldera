@@ -49,14 +49,13 @@ public class EventClient
     {
         String username = "jspacco";
         String password = "12347";
-        //String password = "12348";
         
         EventClient client = new EventClient();
-        Event event = new Event("Battle of Shitbird", 
-            "The battle of Shitbird was a disaster for the Shitbirdians",
-            "Shit",
-            "2024-07-17",
-            "My Arse",
+        Event event = new Event("Battle of Hastings", 
+            "The Battle of Hastings was fought between the Norman-French army of William the Conqueror and the English army under King Harold II. It led to the Norman conquest of England.",
+            "Battle",
+            "1066-10-14",
+            "Hastings, England",
             "jspacco",
             "battle", "england", "medieval");
         String url = "http://localhost:8081/events";
