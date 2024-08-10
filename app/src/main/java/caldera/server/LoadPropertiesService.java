@@ -20,15 +20,6 @@ public class LoadPropertiesService
         this.resourceLoader = resourceLoader;
     }
 
-    // public List<Event> loadEvents() throws IOException
-    // {
-    //     try (InputStream inputStream = baseEventsPath.getInputStream()) {
-    //         List<Event> events = objectMapper.readValue(inputStream, new TypeReference<List<Event>>() {});
-    //         events.add(new Event("TODAY", "Today is the day", "todayness", LocalDate.now(), "Galesburg, IL", "admin", "today"));
-    //         return events;
-    //     }
-    // }
-
     public Properties loadProperties(String filename) throws IOException
     {
         Properties properties = new Properties();
