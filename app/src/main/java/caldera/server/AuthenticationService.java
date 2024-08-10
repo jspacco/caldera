@@ -2,7 +2,6 @@ package caldera.server;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -11,9 +10,6 @@ import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
 
 @Service
@@ -41,11 +37,6 @@ public class AuthenticationService
             properties = loadPropertiesService.loadProperties("users.properties");
             return;
         }
-        // Path path = Paths.get(userPasswordFile);
-        // if (!Files.exists(path) || !Files.isRegularFile(path))
-        // {
-        //     throw new IllegalArgumentException("caldera.user.password.file must be set");
-        // }
         Resource resource = new FileSystemResource(userPasswordFile);
         this.properties = PropertiesLoaderUtils.loadProperties(resource);
     }
