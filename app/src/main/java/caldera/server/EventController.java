@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.annotation.PostConstruct;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -21,32 +23,19 @@ import java.util.List;
 public class EventController
 {
     private final AuthenticationService authenticationService;
-    private final EventRepository eventRepository;
-    private final ObjectMapper objectMapper;
+    private final EventService eventService;
     
     @Autowired
-    public EventController(AuthenticationService authenticationService, EventRepository eventRepository, ObjectMapper objectMapper, ResourceLoader resourceLoader)
+    public EventController(AuthenticationService authenticationService, EventService eventService)
     {
         this.authenticationService = authenticationService;
-        this.eventRepository = eventRepository;
-        this.objectMapper = objectMapper;
-        
-        Resource baseEventsPath = resourceLoader.getResource("classpath:static/base-events.json");
-        
-        try (InputStream inputStream = baseEventsPath.getInputStream()) {
-            List<Event> events = this.objectMapper.readValue(inputStream, new TypeReference<List<Event>>() {});
-            events.add(new Event("TODAY", "Today is the day", "todayness", LocalDate.now(), "Galesburg, IL", "admin", "today"));
-            eventRepository.saveAll(events);
-        } catch (IOException e) {
-            //TODO: how to handle this exception?
-            throw new RuntimeException(e);
-        }
+        this.eventService = eventService;
     }
 
     @GetMapping
     public List<Event> getEvents()
     {
-        return eventRepository.findAll();
+        return eventService.getAll();
     }
 
     @PostMapping
@@ -60,9 +49,10 @@ public class EventController
             return new ResponseEntity<>("username or password incorrect", HttpStatus.UNAUTHORIZED);
         }
         //TODO: handle exceptions
-        eventRepository.save(event);
-        //events.add(event);
+        eventService.save(event);
         return new ResponseEntity<>("event added", HttpStatus.CREATED);
     }
+
+    
 }
 

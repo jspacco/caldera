@@ -19,13 +19,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class DataService
 {
+    //TODO: integrate into EventService
+    
     @Value("classpath:testcalendar.html")
     Resource testHtmlPath;
 
     @Value("classpath:templates/calendar.html")
     Resource calendarHtmlPath;
 
-    @Value("classpath:static/base-events.json")
+    @Value("classpath:./static/events.json")
     Resource baseEventsPath;
 
     //TODO: add method for loading current events from wherever they are
@@ -39,7 +41,7 @@ public class DataService
         this.objectMapper = objectMapper;
     }
 
-    public List<Event> loadEvents() throws IOException
+    private List<Event> loadEvents() throws IOException
     {
         try (InputStream inputStream = baseEventsPath.getInputStream()) {
             List<Event> events = objectMapper.readValue(inputStream, new TypeReference<List<Event>>() {});
