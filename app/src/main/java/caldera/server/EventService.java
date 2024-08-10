@@ -2,6 +2,8 @@ package caldera.server;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,11 +20,19 @@ import jakarta.annotation.PostConstruct;
 @Service
 public class EventService
 {
+    // base events file for fresh installs
+    // can be configured in application.properties
     @Value("${caldera.events.file:classpath:./static/events.json}")
     private String baseEventsFile;
 
     @Value("${spring.datasource.url:jdbc\\:h2\\:file\\:./data/events}")
     private String databaseUrl;
+
+    // html calendar with {{EVENTS}} placeholder
+    // this is pre-loaded with the installation and should not
+    // need to be changed 
+    @Value("classpath:templates/calendar.html")
+    Resource calendarHtmlPath;
 
     private final ResourceLoader resourceLoader;
     private final EventRepository eventRepository;
@@ -33,6 +43,14 @@ public class EventService
         this.resourceLoader = resourceLoader;
         this.eventRepository = eventRepository;
         this.objectMapper = objectMapper;
+    }
+
+    public String loadCalendarWithEvents() throws IOException
+    {
+        String calendarHtml = new String(Files.readAllBytes(Paths.get(calendarHtmlPath.getURI())));
+        String json = objectMapper.writeValueAsString(eventRepository.findAll());
+        calendarHtml = calendarHtml.replace("{{EVENTS}}", json);
+        return calendarHtml;        
     }
 
     private Resource findEventsFile() 

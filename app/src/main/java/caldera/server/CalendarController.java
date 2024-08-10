@@ -11,19 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class CalendarController 
 {
-    private String calendarHtml;
-    //private List<Event> events;
-    private final DataService dataService;
+    private final EventService eventService;
 
     @Autowired
-    public CalendarController(DataService dataService) {
-        this.dataService = dataService;
-        try {
-            calendarHtml = dataService.loadCalendarWithEvents();
-        } catch (IOException e) {
-            //TODO: handle exception
-            e.printStackTrace();
-        }
+    public CalendarController(EventService eventService)
+    {
+        this.eventService = eventService;
     }
 
     @GetMapping(value = {"/", "/calendar"}, produces = MediaType.TEXT_HTML_VALUE)
@@ -31,7 +24,7 @@ public class CalendarController
     {
         //TODO: get the events and add them to the calendarHtml
         try {
-            return ResponseEntity.ok(dataService.loadCalendarWithEvents());
+            return ResponseEntity.ok(eventService.loadCalendarWithEvents());
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Error loading calendar");
         }
