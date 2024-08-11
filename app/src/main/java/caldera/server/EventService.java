@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -25,6 +26,7 @@ public class EventService
     @Value("${caldera.events.file:classpath:./static/events.json}")
     private String baseEventsFile;
 
+    // datasource.url is a Spring Boot configuration property
     @Value("${spring.datasource.url:jdbc\\:h2\\:file\\:./data/events}")
     private String databaseUrl;
 
@@ -38,6 +40,7 @@ public class EventService
     private final EventRepository eventRepository;
     private final ObjectMapper objectMapper;
 
+    @Autowired
     public EventService(ResourceLoader resourceLoader, EventRepository eventRepository, ObjectMapper objectMapper)
     {
         this.resourceLoader = resourceLoader;

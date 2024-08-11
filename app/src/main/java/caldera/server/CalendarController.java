@@ -22,7 +22,6 @@ public class CalendarController
     @GetMapping(value = {"/", "/calendar"}, produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> getCalendar()
     {
-        //TODO: get the events and add them to the calendarHtml
         try {
             return ResponseEntity.ok(eventService.loadCalendarWithEvents());
         } catch (IOException e) {
