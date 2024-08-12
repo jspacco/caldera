@@ -98,7 +98,7 @@ public class EventService
         try {
             long size = eventRepository.count();
             System.out.println("Database size: " + size);
-            return true;
+            return size > 0;
         } catch (Exception e) {
             return false;
         }
@@ -107,9 +107,10 @@ public class EventService
     @PostConstruct
     public void init() throws IOException
     {
-        if (databaseUrl != null || !doesDatabaseExist())
+        if (!doesDatabaseExist())
         {
             // create a new database if we don't have a url or the database doesn't exist
+            System.err.printf("Creating new event database %s %s\n", databaseUrl, doesDatabaseExist(), doesDatabaseExist());
             createNewEventDatabase();
         }
     }

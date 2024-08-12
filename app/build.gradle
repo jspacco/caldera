@@ -28,6 +28,8 @@ dependencies {
 }
 
 
+
+
 task server(type: JavaExec) {
     doFirst {
         standardInput = System.in
@@ -66,7 +68,7 @@ bootJar {
     archiveFileName = "spring-${version}.jar"
 }
 
-task zipFiles(type: Zip) {
+task zipServer(type: Zip) {
     // Set the name of the output ZIP file
     archiveFileName = "caldera-${version}.zip"
     
@@ -83,6 +85,43 @@ task zipFiles(type: Zip) {
         include '**/spring*.jar'
     }
 
-    // Optionally set the base directory in the ZIP file
-    into("caldera-${version}")  // All files will be placed under my-archive directory in the ZIP
+    into("caldera-${version}")
+}
+
+configurations {
+    fatJarConfig
+}
+
+// Assign selected dependencies to the custom configuration
+dependencies {
+    fatJarConfig 'com.fasterxml.jackson.core:jackson-databind'
+    fatJarConfig 'com.fasterxml.jackson.core:jackson-annotations'
+    fatJarConfig 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    fatJarConfig 'com.squareup.okhttp3:okhttp:4.9.3'
+}
+
+task fatJar(type: Jar) {
+    // for the client
+    manifest {
+        attributes 'Main-Class': 'caldera.client.EventClient'
+    }
+    archiveBaseName = "caldera-client"
+    destinationDirectory = file("${buildDir}/release")
+    
+    // Include only the specific package from src/main/java
+    from(sourceSets.main.output.classesDirs) {
+        include 'caldera/client/**'
+        include 'caldera/server/Event.class'
+        include 'caldera/server/Event$*.class'
+        exclude 'caldera/server/**'
+    }
+    
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.fatJarConfig.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+task release {
+    dependsOn 'zipServer'
+    dependsOn 'fatJar'
 }
